@@ -41,7 +41,7 @@
                                                 <td class="pro-remove"><a href="#" @click="deleteItem(barang.id)"><i class="far fa-trash-alt"></i></a>
                                                 </td>
                                                 <td class="pro-thumbnail">
-                                                    <a class="fas fa-retweet" v-if="barang.is_required_comparison == true"> Bandingkan</a>
+                                                    <a class="fas fa-retweet" v-if="barang.is_required_comparison == true" href="/compare"> Bandingkan</a>
                                                     <p v-else> Tidak Perlu Perbandingan</p>
                                                 </td>
                                                 <td class="pro-remove">
@@ -58,44 +58,63 @@
                                                     </div>
                                                 </td>
                                                 <td class="pro-subtotal"><span>{{ barang.total_price | currency}}</span></td>
-                                            <div class="modal fade modal-quick-view" :id="'negoModal-' + barang.item_id" tabindex="-1" role="dialog" aria-labelledby="quickModal" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <button type="button" class="close modal-close-btn ml-auto" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        <div class="product-details-modal">
-                                                            <h3 class="text-black">{{ barang.item.name }}</h3>
-                                                            <h5 class="text-black">Quantity : {{ barang.quantity }}</h5>
-                                                            <div class="row justify-content-center">
-                                                                <div class="col-6">
-                                                                    <input class="form-control my-2" type="text" v-model="expected_unit" placeholder="Nego harga satuan" aria-label="default input example">
-                                                                    <input class="form-control my-2" type="text" v-model="quantity" placeholder="Jumlah yang akan dibeli" aria-label="default input example">
-                                                                    <input class="form-control my-2" type="text" v-model="available" placeholder="Perkiraan pembayaran (dalam hari)" aria-label="default input example">
-                                                                    <input class="form-control my-2" type="text" v-model="shipping_cost" placeholder="Nego Ongkir" aria-label="default input example">
-                                                                    <label for="exampleFormControlTextarea1" class="form-label">Pesan (Opsional)</label>
-                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" v-model="pesan" rows="3"></textarea>
-                                                                </div>
-                                                                <div class="col-12 mt-4">
-                                                                    <button type="button" class="btn btn-primary" @click="nego(barang.item_id)">Kirim Nego</button>
+                                                <div class="modal fade modal-quick-view" :id="'negoModal-' + barang.item_id" tabindex="-1" role="dialog" aria-labelledby="quickModal" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modal-close-btn ml-auto" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="product-details-modal">
+                                                                <h3 class="text-black">{{ barang.item.name }}</h3>
+                                                                <h5 class="text-black">Quantity : {{ barang.quantity }}</h5>
+                                                                <div class="row justify-content-center">
+                                                                    <div class="col-6">
+                                                                        <input class="form-control my-2" type="text" v-model="expected_unit" placeholder="Nego harga satuan" aria-label="default input example">
+                                                                        <input class="form-control my-2" type="text" v-model="quantity" placeholder="Jumlah yang akan dibeli" aria-label="default input example">
+                                                                        <input class="form-control my-2" type="text" v-model="available" placeholder="Perkiraan Barang Dikirim (dalam hari)" aria-label="default input example">
+                                                                        <label for="exampleFormControlTextarea1" class="form-label">Pesan (Opsional)</label>
+                                                                        <textarea class="form-control" id="exampleFormControlTextarea1" v-model="pesan" rows="3"></textarea>
+                                                                    </div>
+                                                                    <div class="col-12 mt-4">
+                                                                        <button type="button" data-dissmiss="modal" class="btn btn-primary" @click="nego(barang.item_id)">Kirim Nego</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <div class="widget-social-share">
-                                                                <span class="widget-label">Siplah 2021</span>
-                                                                <!-- <div class="modal-social-share">
-                                                                    <a href="#" class="single-icon"><i class="fab fa-facebook-f"></i></a>
-                                                                    <a href="#" class="single-icon"><i class="fab fa-twitter"></i></a>
-                                                                    <a href="#" class="single-icon"><i class="fab fa-youtube"></i></a>
-                                                                    <a href="#" class="single-icon"><i class="fab fa-google-plus-g"></i></a>
-                                                                </div> -->
+                                                            <div class="modal-footer">
+                                                                <div class="widget-social-share">
+                                                                    <span class="widget-label">Siplah 2021</span>
+                                                                    <!-- <div class="modal-social-share">
+                                                                        <a href="#" class="single-icon"><i class="fab fa-facebook-f"></i></a>
+                                                                        <a href="#" class="single-icon"><i class="fab fa-twitter"></i></a>
+                                                                        <a href="#" class="single-icon"><i class="fab fa-youtube"></i></a>
+                                                                        <a href="#" class="single-icon"><i class="fab fa-google-plus-g"></i></a>
+                                                                    </div> -->
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="modal fade modal-quick-view" :id="'compareModal-' + barang.item_id" tabindex="-1" role="dialog" aria-labelledby="quickModal" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="close modal-close-btn ml-auto" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <div class="product-details-modal">
+                                                                <h4>Perbandingan</h4>
+                                                                <hr/>
+                                                                <div class="row justify-content-center">
+                                                                    <div class="col-8">
+                                                                        {{ barang.item.category_id }}
+                                                                            <!-- <button type="button" class="btn btn-danger btn-block mt-4" @click="retur(items.id)" data-dismiss="modal">Kirim Komplain</button> -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </tr>
                                             
                                             <!-- Discount Row  -->
@@ -376,7 +395,7 @@ export default  {
                 '',
                 'success'
                 )
-            this.$router.push('/cart')
+            this.$router.push('/')
             }
          })
         },

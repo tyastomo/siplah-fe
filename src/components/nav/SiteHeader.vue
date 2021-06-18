@@ -83,8 +83,8 @@
 						</div>
 						<div class="col-lg-5">
 							<div class="header-search-block">
-								<input type="text" placeholder="Search entire store here">
-								<button class="btn">Search</button>
+								<input type="text" placeholder="Pencarian..." v-model="cari">
+								<button class="btn" @click="goCari()">Search</button>
 							</div>
 						</div>
 						<div class="col-lg-4">
@@ -153,7 +153,8 @@ export default {
   name: 'SiteHeader',
   data() {
 		return {
-			isLogin: localStorage.token
+			isLogin: localStorage.token,
+			cari: ""
 		};
 	},
   created() {
@@ -172,6 +173,10 @@ export default {
                 id: id
             }
           });
+	},
+	goCari(){
+		this.$store.dispatch("goCari", this.cari);
+		this.$route.push('/');
 	}
   },
   computed: mapState({

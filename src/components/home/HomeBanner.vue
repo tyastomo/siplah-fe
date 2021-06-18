@@ -6,7 +6,7 @@
                                                     "slidesToShow": 1,
                                                     "dots":true
                                                     }'>
-            <div class="single-slide bg-image bg-overlay--dark" v-for="pic in banner" :key="pic.id" :data-bg="pic.image">
+            <div class="single-slide bg-image" v-for="pic in banner" :key="pic.id" :data-bg="pic.image">
                 <div class="container">
                     <div class="home-content text-center">
                     </div>
@@ -32,7 +32,7 @@ export default {
           banner: ""
       }
   },
-  beforeCreate() {
+  mounted() {
     axios.get("https://api.siplah.anugrahmal.id/v1/banners")
     .then(response => {
         console.log(response.data.data)

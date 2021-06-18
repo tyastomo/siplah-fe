@@ -60,6 +60,16 @@ export default new Vuex.Store({
           })
       },
 
+      goCari: ({ commit }, id) => {
+        axs.get("/items?sort_field=created_at&sort_direction=desc&name="+id)
+          .then(response => {
+            commit(
+              "getProduct_mutation",
+              response
+            );
+          })
+      },
+
       productDetails: ({commit}, idProduct) => {
         axs.get("/items/" + idProduct)
         .then(response => {

@@ -9,6 +9,8 @@ import Cart from '../views/products/Cart.vue'
 import Profile from '../views/profile/Profile.vue'
 import result from '../views/products/result.vue'
 import Register from '../views/auth/Register.vue'
+import Compare from '../views/products/Compare.vue'
+import Cari from '../views/products/cari.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +41,11 @@ const routes = [
     component: ProductDetail,
   },
   {
+    path: '/cari/:id',
+    name: 'Cari',
+    component: Cari,
+  },
+  {
     path: '/cart',
     name: 'Cart',
     component: Cart,
@@ -57,6 +64,11 @@ const routes = [
     path: '/register-merchant',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/compare',
+    name: 'Compare',
+    component: Compare,
   },
   {
     path: '/about',

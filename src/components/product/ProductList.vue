@@ -14,7 +14,7 @@
 					<ProductCard
 						:idProduct="n.id"
 						:title="n.name"
-						:foto_sampul="n.media_primary.original"
+						:foto_sampul="n.media_primary.thumbnail"
 						:harga_bawah="n.item_lower_price.price"
 						:kategori="n.category.name"
 						:dalam_negeri="n.domestic_product"

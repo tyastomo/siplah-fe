@@ -69,18 +69,57 @@
                         </div>
                         <div class="add-cart-btn">
                             <button type="submit" class="btn btn-outlined--warning" v-on:click="submit"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        </div>
                     </div>
-                        </div>
-                    <!-- <div class="add-to-cart-row mt--30">
+                    <div class="add-to-cart-row mt--30">
                         <div class="add-cart-btn mr-2">
-                            <a href="" class="btn btn-outlined--primary"><i class="fas fa-random"></i> Add to
-                                Compare</a>
+                            <a href="#compareModal" data-toggle="modal" @click="compare(detail.data.category.id, detail.data.id)" ><i class="fas fa-random"></i> Add to Compare</a>
                         </div>
-                        <div class="add-cart-btn mr-2">
+                        <!-- <div class="add-cart-btn mr-2">
                             <a href="" class="btn btn-outlined--pink"><i class="fas fa-heart"></i> Add to
                                 Wishlist</a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-quick-view" id="compareModal" tabindex="-1" role="dialog" aria-labelledby="quickModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close modal-close-btn ml-auto" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="product-details-modal">
+                        <h4>Bandingkan Produk</h4>
+                        <hr/>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="shop-product-wrap grid with-pagination row space-db--30 shop-border justify-content-center">
+                                    <div
+                                        v-for="n in produk"
+                                        :key="n.id"
+                                        class="col-lg-4 col-sm-6 col-6 tambah"
+                                        @click="tambah(n.id)">
+                                    <ProductCard
+                                        :idProduct="n.id"
+                                        :title="n.name"
+                                        :foto_sampul="n.media_primary.thumbnail"
+                                        :harga_bawah="n.item_lower_price.price"
+                                        :kategori="n.category.name"
+                                        :dalam_negeri="n.domestic_product"
+                                        :umkm="n.umkm_product"
+                                    />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div> -->
+                        <div class="row">
+                            <div class="col-8">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,29 +227,34 @@
 <script>
 // import { mapGetters } from "vuex";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+// import { mapState } from "vuex";
+import ProductCard from '../../components/product/ProductCard.vue'
 
 export default {
   name: 'ProductDetail',
   beforeCreate() {
-    //   this.$store.dispatch("productDetails",
-    //   this.$route.params.idProduct);
     axios.get("https://api.siplah.anugrahmal.id/v1/items/"+this.$route.params.idProduct)
         .then(response => {
           console.log(response)
           this.detail = response.data
         });
   },
+  components: {
+      ProductCard,
+  },
     data() {
         return {
             quantity: 1,
             // idProduct: this.$route.params.idProduct
-            detail: ""
+            detail: "",
+            item_ids: [],
+            produk: ""
         };
     },
-//     computed: {
-//       ...mapGetters(['detail']),
-//   },
+    // computed: mapState({
+    //     produk: state => state.produk
+    // }),
   methods: {
     submit() {
       var data = {
@@ -220,8 +264,7 @@ export default {
     //   console.log(data)
       axios.post("https://api.siplah.anugrahmal.id/v1/carts", data, {headers:
           {Authorization: 'Bearer ' + window.localStorage.getItem("token")}})
-        .then(response => {
-            
+        .then(response => { 
             console.log(response)
         })
         Swal.fire({
@@ -237,7 +280,33 @@ export default {
                 this.$router.push('/cart')
             }
          })
+    },
+    compare(kategori, id) {
+        this.$store.dispatch("getKategori", kategori)
+        axios.get("https://api.siplah.anugrahmal.id/v1/items?sort_field=created_at&sort_direction=desc&category_id="+kategori)
+          .then(response => {
+            this.produk = response.data.data.data
+          })
+        this.item_ids = [id]
+    },
+    tambah(id) {
+        this.item_ids.push(id);
+        var data = {
+            item_ids: this.item_ids
+        };
+        axios.post("https://api.siplah.anugrahmal.id/v1/comparisons", data, {headers:
+          {Authorization: 'Bearer ' + window.localStorage.getItem("token")}})
+        .then(response => {
+            console.log(response)
+            this.$route.push('/compare')
+        })
     }
   }
 }
 </script>
+
+<style scoped>
+    .tambah:focus {
+        border-color: cornflowerblue;
+    }
+</style>
